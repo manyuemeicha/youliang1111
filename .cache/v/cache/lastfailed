@@ -1,0 +1,5 @@
+{
+  "src/test_case/test_telephone.py::test_pbone": true,
+  "src/test_case/test_telephone.py::test_phone": true,
+  "src/test_case/test_website.py::test_create_order": true
+}

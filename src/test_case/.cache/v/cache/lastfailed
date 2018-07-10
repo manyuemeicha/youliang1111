@@ -1,0 +1,8 @@
+{
+  "test_telephone.py::test_pbone": true,
+  "test_telephone.py::test_phone": true,
+  "test_user_manage.py": true,
+  "test_user_manage.py::test_add_user": true,
+  "test_website.py::Test_website::()::test_create_order": true,
+  "test_website.py::test_create_order": true
+}

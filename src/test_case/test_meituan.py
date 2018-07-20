@@ -1,7 +1,7 @@
 from src.page.meituan_order import Meituan_Order
 import pytest
 from db_fixture.mysql_db import DB
-#@pytest.mark.skipif(3>2,reason="测试")
+@pytest.mark.skipif(3>2,reason="测试")
 def test_meituan():
     db=DB()
     db.clear("order_push_record","美团")

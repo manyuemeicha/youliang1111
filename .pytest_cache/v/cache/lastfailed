@@ -1,6 +1,5 @@
 {
   "src/test_case/test_telephone.py::test_phone": true,
   "src/test_case/test_user_manage.py": true,
-  "src/test_case/test_user_manage.py::test_add_user": true,
-  "src/test_case/test_website.py::test_create_order": true
+  "src/test_case/test_user_manage.py::test_add_user": true
 }

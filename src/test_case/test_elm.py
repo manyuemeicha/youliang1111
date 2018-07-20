@@ -1,7 +1,7 @@
 from src.page.elm_order import Elm_Order
 import pytest
 from db_fixture.mysql_db import DB
-#@pytest.mark.skipif(3>2,reason="测试")
+@pytest.mark.skipif(3>2,reason="测试")
 def test_elm():
     db=DB()
     db.clear("order_push_record","饿了么")

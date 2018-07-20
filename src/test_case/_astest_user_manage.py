@@ -3,7 +3,8 @@ from src.page.add_select_user import Add_Select_User
 from selenium import webdriver
 import time
 #注意用例的入参写上browser，以及初始化页面类时，也要传入browser
-def _1test_add_user(browser):
+@pytest.mark.skipif(3>2,reason="测试")
+def test_add_user(browser):
     username = "cs" + str(time.time())
     add_user=Add_Select_User(browser)
     alert_text,select_result=add_user.add_user_success(username)

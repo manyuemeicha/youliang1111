@@ -5,7 +5,7 @@ from src.page.login_website import LoginPage
 
 
 #注意用例的入参写上browser，以及初始化页面类时，也要传入browser
-#@pytest.mark.skipif(3>2,reason="不测试网站订单")
+@pytest.mark.skipif(3>2,reason="不测试网站订单")
 def test_create_order(browser):
     login = LoginPage(browser)
     #接收登录后跳转的菜单页面

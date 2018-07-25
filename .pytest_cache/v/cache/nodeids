@@ -1,6 +1,5 @@
 [
   "src/test_case/test_baidu.py::test_baidu",
-  "src/test_case/test_elm.py::test_elm",
   "src/test_case/test_meituan.py::test_meituan",
   "src/test_case/test_telephone.py::test_phone",
   "src/test_case/test_website.py::test_create_order",

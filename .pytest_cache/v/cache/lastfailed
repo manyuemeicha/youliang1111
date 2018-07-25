@@ -1,4 +1,5 @@
 {
+  "src/test_case/test_elm.py": true,
   "src/test_case/test_telephone.py::test_phone": true,
   "src/test_case/test_user_manage.py": true,
   "src/test_case/test_user_manage.py::test_add_user": true

@@ -2,8 +2,10 @@ import pytest
 import time
 from src.common import send_mail
 
-now_time=time.strftime("%Y_%m_%d_%H_%M_%S")
-fp="./report/"+now_time+"report.html"
+# now_time=time.strftime("%Y_%m_%d_%H_%M_%S")
+# fp="./report/"+now_time+"report.html"
+
+fp="./report/report.html"
 pytest.main(["-s","./src/test_case/","--html="+fp])
 #pytest命令行执行默认不会打印log信息，需要加‘-s’参数或者 ‘–capture=no’，即pytest -s
 

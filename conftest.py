@@ -3,7 +3,7 @@ from selenium import webdriver
 import os
 
 domain="http://test02.youliang100.com/"
-elm_url="http://test02.youliang100.com/elemev2/push"
+elm_url="http://test02.youliang100.com/elemv2/push"
 baidu_url="http://test02.youliang100.com/thirdparty/baidu/baiduorderdo"
 meituan_url="http://test02.youliang100.com/thirdparty/meituan/receivemeituanorder"
 

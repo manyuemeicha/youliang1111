@@ -17,9 +17,9 @@ if __name__=='__main__':
         pytest.main()
 
         # 只运行某个文件时
-        # pytest.main("./test_elm.py")
+        # pytest.main("./111test_elm.py")
         # 选择运行特定的某个测试用例
-        # pytest.main("./test_elm.py::test_add")
+        # pytest.main("./111test_elm.py::test_add")
 
 '''
 . 选择运行特定的某个测试用例

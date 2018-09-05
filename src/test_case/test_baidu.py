@@ -3,6 +3,7 @@ import pytest
 from db_fixture.mysql_db import DB
 @pytest.mark.skipif(3>2,reason="测试")
 def test_baidu():
+    '''百度下单'''
     db=DB()
     db.clear("fosordertranslog","百度")
 

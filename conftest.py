@@ -1,6 +1,13 @@
 import pytest
 from selenium import webdriver
 import os
+from datetime import datetime
+from py.xml import html
+
+
+
+
+
 
 domain="http://test02.youliang100.com/"
 elm_url="http://test02.youliang100.com/elemv2/push"
@@ -16,18 +23,6 @@ def browser():
     if driver is None:
         driver = webdriver.Chrome()
     return driver
-
-# @pytest.fixture(scope="function", autouse=True)
-# def ft():
-#     print("fixture-test!!!")
-
-
-'''
-    driver = Remote(command_executor='http://192.168.44.129:5557/wd/hub',
-                    desired_capabilities={
-                          "browserName": "firefox",
-                    })
-'''
 
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
@@ -59,4 +54,37 @@ def pytest_runtest_makereport(item):
 
 def _capture_screenshot(name):
     driver.get_screenshot_as_file(name)
+
+#以下三个函数是为了在html报告里显示出用例的文档注释docstring
+@pytest.mark.optionalhook
+def pytest_html_results_table_header(cells):
+    cells.insert(2, html.th('Description'))
+    cells.insert(1, html.th('Time', class_='sortable time', col='time'))
+    cells.pop()
+
+@pytest.mark.optionalhook
+def pytest_html_results_table_row(report, cells):
+    cells.insert(2, html.td(report.description))
+    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))
+    cells.pop()
+
+@pytest.mark.hookwrapper
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    report.description = str(item.function.__doc__)
+
+# @pytest.fixture(scope="function", autouse=True)
+# def ft():
+#     print("fixture-test!!!")
+
+
+'''
+    driver = Remote(command_executor='http://192.168.44.129:5557/wd/hub',
+                    desired_capabilities={
+                          "browserName": "firefox",
+                    })
+'''
+
+
 

@@ -6,9 +6,9 @@ from src.common import send_mail
 # fp="./report/"+now_time+"report.html"
 
 fp="./report/report.html"
-pytest.main(["-s","./src/test_case/","--html="+fp])
+pytest.main(["-s","./src/test_case/","--html="+fp,"--self-contained-html"])
 #pytest命令行执行默认不会打印log信息，需要加‘-s’参数或者 ‘–capture=no’，即pytest -s
-
+#--self-contained-html  不加这个参数的话 发送邮件的报告附件里没有样式
 #send_mail.send_mail(fp)
 
 

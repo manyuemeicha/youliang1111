@@ -1,12 +1,13 @@
 from src.page.baidu_order import Baidu_Order
 import pytest
 from db_fixture.mysql_db import DB
+
+
 @pytest.mark.skipif(3>2,reason="测试")
 def test_baidu():
     '''百度下单'''
     db=DB()
     db.clear("fosordertranslog","百度")
-
 
     r=Baidu_Order()
     assert "error" in r.baidu_order()
@@ -14,7 +15,7 @@ def test_baidu():
     db.update("百度")
     db.close()
 
-if __name__=='__main__':
+if __name__ == '__main__':
         pytest.main()
 
         # 只运行某个文件时

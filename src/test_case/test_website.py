@@ -1,26 +1,25 @@
 import pytest
 import time
-from selenium import webdriver
 from src.page.login_website import LoginPage
 
 
-#注意用例的入参写上browser，以及初始化页面类时，也要传入browser
+# 注意用例的入参写上browser，以及初始化页面类时，也要传入browser
 @pytest.mark.skipif(3>2,reason="不测试网站订单")
 def test_create_order(browser):
     '''网站下单'''
     login = LoginPage(browser)
-    #接收登录后跳转的菜单页面
-    webdite_menu=login.login_success("18210532386", "111111")
+    # 接收登录后跳转的菜单页面
+    website_menu = login.login_success("18210532386", "111111")
     time.sleep(4)
     # 调用菜单页面加菜方法
-    confirm_page=webdite_menu.submit_order()
+    confirm_page=website_menu.submit_order()
     time.sleep(2)
     confirm_page.confirm_order_success()
 
     time.sleep(3)
-    url=login.current_url()
+    url = login.current_url()
     assert "orderid" in url
-if __name__=="__main__":
+if __name__ == "__main__":
     pytest.main()
 
 

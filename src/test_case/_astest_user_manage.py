@@ -2,6 +2,8 @@ import pytest
 from src.page.add_select_user import Add_Select_User
 from selenium import webdriver
 import time
+
+
 #注意用例的入参写上browser，以及初始化页面类时，也要传入browser
 @pytest.mark.skipif(3>2,reason="测试")
 def test_add_user(browser):

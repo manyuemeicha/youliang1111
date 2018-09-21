@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.support.select import Select
 import time
 
+
 class Modify_Delete_User(Base_Page):
     def open_modify_user_page(self):
         self.set_max_window()

@@ -106,10 +106,10 @@ def send_mail(fp):
     msg.attach(MIMEText('hello ,send by Python ....', 'plain', 'utf-8'))
 
     # 添加附件就是加上一个MIMEBase 从本地读取一个文件
-    # fn = fp.split("/")[-1]   #获取要发送文件的名称
-    fn=os.path.basename(fp)   #os.path.basename(path):返回path最后的文件名。如果path以／或\结尾，那么就会返回空值
+    # fn = fp.split("/")[-1]   # 获取要发送文件的名称
+    fn=os.path.basename(fp)   # os.path.basename(path):返回path最后的文件名。如果path以／或\结尾，那么就会返回空值
     with open(fp, 'rb') as f:
-        #附件用MIMEBase
+        # 附件用MIMEBase
         # 设置附件的MIME和文件名
         mime = MIMEBase('application','octet-stream', filename=fn)
         # 加上必要的MIME头信息
@@ -123,9 +123,9 @@ def send_mail(fp):
         msg.attach(mime)
 
     server = smtplib.SMTP(smtpserver, 25)
-   # server.set_debuglevel(1)   #显示邮件发送日志
+    # server.set_debuglevel(1)   #显示邮件发送日志
     server.login(user, pwd)
     server.sendmail(sender, [receiver], msg.as_string())
     server.quit()
 
-#send_mail("C:\\Users\\Alex\\PycharmProjects\\untitled\\youliang\\report\\2018_03_01_15_38_12report.html")
+# send_mail("C:\\Users\\Alex\\PycharmProjects\\untitled\\youliang\\report\\2018_03_01_15_38_12report.html")

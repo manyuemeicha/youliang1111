@@ -1,6 +1,8 @@
 from src.page.phone_order import Phone_Order
 from src.page.login_youliang import Login_Youliang
 import pytest
+
+
 #注意用例的入参写上browser，以及初始化页面类时，也要传入browser
 def test_phone(browser):
     '''电话下单'''
@@ -12,9 +14,8 @@ def test_phone(browser):
 
     message=phone.message().text
     assert message=="录入订单成功"
-if __name__=="__main__":
+if __name__ == "__main__":
         pytest.main()
-
 
         # 只运行某个文件时
         # pytest.main("./111test_elm.py")

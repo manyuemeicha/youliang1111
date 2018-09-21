@@ -1,20 +1,20 @@
 from src.page.meituan_order import Meituan_Order
 import pytest
 from db_fixture.mysql_db import DB
+
+
 @pytest.mark.skipif(3>2,reason="测试")
 def test_meituan():
     '''美团下单'''
     db=DB()
     db.clear("order_push_record","美团")
 
-
-    r=Meituan_Order()
+    r = Meituan_Order()
     assert "ok" in r.meituan_order()
     db.update("美团")
     db.close()
 if __name__=='__main__':
         pytest.main()
-
 
         # 只运行某个文件时
         # pytest.main("./111test_elm.py")

@@ -1,22 +1,22 @@
 from src.page.elm_order import Elm_Order
 import pytest
 from db_fixture.mysql_db import DB
+
+
 @pytest.mark.skipif(3>2,reason="测试")
 def test_elm():
-    db=DB()
+    db = DB()
     db.clear("order_push_record","饿了么")
-
-
-    r=Elm_Order()
+    r = Elm_Order()
     assert "ok" in r.elm_order()
     db.update("饿了么")
     db.close()
-if __name__=='__main__':
+if __name__ == '__main__':
         pytest.main("./111test_elm.py")
-        #只运行某个文件时
-        #pytest.main("./111test_elm.py")
-        #选择运行特定的某个测试用例
-        #pytest.main("./111test_elm.py::test_add")
+        # 只运行某个文件时
+        # pytest.main("./111test_elm.py")
+        # 选择运行特定的某个测试用例
+        # pytest.main("./111test_elm.py::test_add")
 
 '''
 . 选择运行特定的某个测试用例

@@ -5,16 +5,13 @@ from datetime import datetime
 from py.xml import html
 
 
-
-
-
-
 domain="http://test02.youliang100.com/"
 elm_url="http://test02.youliang100.com/elemv2/push"
 baidu_url="http://test02.youliang100.com/thirdparty/baidu/baiduorderdo"
 meituan_url="http://test02.youliang100.com/thirdparty/meituan/receivemeituanorder"
 
-driver = None  #定义一个全局变量，方便自动截图函数里调用get_screenshot_as_file(),前提是先在browser()里给driver赋值
+driver = None  # 定义一个全局变量，方便自动截图函数里调用get_screenshot_as_file(),前提是先在browser()里给driver赋值
+
 
 #整个测试只启动一次一浏览器，所有模块共用一个浏览器驱动
 @pytest.fixture(scope='session', autouse=True)
@@ -23,6 +20,7 @@ def browser():
     if driver is None:
         driver = webdriver.Chrome()
     return driver
+
 
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
@@ -43,8 +41,8 @@ def pytest_runtest_makereport(item):
             '''
             screen_name ="./report/image/"+report.nodeid.replace("::", "_").replace("src/test_case/","")+".png"
             _capture_screenshot(screen_name)
-            #这里再定义一个图片路径的原因是报告里的显示的图片的路径是相当于当前报告文件的，如果还用screen_name，
-            #那报告里肯定找不到图片的，因为路径显示不对，所以重新定义一个相对于当前报告文件的图片路径，让报告文件能显示图片
+            # 这里再定义一个图片路径的原因是报告里的显示的图片的路径是相当于当前报告文件的，如果还用screen_name，
+            # 那报告里肯定找不到图片的，因为路径显示不对，所以重新定义一个相对于当前报告文件的图片路径，让报告文件能显示图片
             image_path=screen_name.replace("./report/image/","./image/")
             if screen_name:
                 html = '<div><img src="%s" alt="screenshot" style="width:304px;height:228px;" ' \
@@ -52,21 +50,25 @@ def pytest_runtest_makereport(item):
                 extra.append(pytest_html.extras.html(html))
         report.extra = extra
 
+
 def _capture_screenshot(name):
     driver.get_screenshot_as_file(name)
 
-#以下三个函数是为了在html报告里显示出用例的文档注释docstring
+
+# 以下三个函数是为了在html报告里显示出用例的文档注释docstring
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
     cells.insert(2, html.th('Description'))
     cells.insert(1, html.th('Time', class_='sortable time', col='time'))
     cells.pop()
 
+
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
     cells.insert(2, html.td(report.description))
     cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))
     cells.pop()
+
 
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item, call):

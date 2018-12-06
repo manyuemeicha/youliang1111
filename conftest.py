@@ -5,15 +5,15 @@ from datetime import datetime
 from py.xml import html
 
 
-domain="http://test02.youliang100.com/"
-elm_url="http://test02.youliang100.com/elemv2/push"
-baidu_url="http://test02.youliang100.com/thirdparty/baidu/baiduorderdo"
-meituan_url="http://test02.youliang100.com/thirdparty/meituan/receivemeituanorder"
+domain = "http://test02.youliang100.com/"
+elm_url = "http://test02.youliang100.com/elemv2/push"
+baidu_url = "http://test02.youliang100.com/thirdparty/baidu/baiduorderdo"
+meituan_url = "http://test02.youliang100.com/thirdparty/meituan/receivemeituanorder"
 
 driver = None  # 定义一个全局变量，方便自动截图函数里调用get_screenshot_as_file(),前提是先在browser()里给driver赋值
 
 
-#整个测试只启动一次一浏览器，所有模块共用一个浏览器驱动
+# 整个测试只启动一次一浏览器，所有模块共用一个浏览器驱动
 @pytest.fixture(scope='session', autouse=True)
 def browser():
     global driver
@@ -75,6 +75,7 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     report.description = str(item.function.__doc__)
+
 
 # @pytest.fixture(scope="function", autouse=True)
 # def ft():

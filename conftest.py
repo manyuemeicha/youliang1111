@@ -80,10 +80,10 @@ def pytest_runtest_makereport(item, call):
 
 # 当用pytets做接口自动化时（注意是接口自动化，因为做web自动化，关注页面，失败会自动截图）
 # 加上下边的内容 3个函数，将接口的返回显示在报告上（也可以显示非json形式的返回结果，只要是请求的返回都可以显示，
-# 那么接收用例请求的返回值就要用r.text或者r.content（字节形式），但是一般是测试页面的返回才会是非json，
-# 看返回结果没什么意义），
+# 那么接收用例请求的返回值就要用r.text或者r.content（字节形式），但是一般是测试页面的返回才会是非json，看返回结果没什么意义），
 # 以及添加可排序的Time时间列，和删除Links列
 # 注意！！！必须将这三个函数放在添加描述列的后边，否则不生效
+# 注意！！！！每一条用例方法里加一个return 返回接口的返回结果，用于显示在html上
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
     cells.insert(2, html.th('Response'))     # 添加列名

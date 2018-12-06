@@ -56,7 +56,7 @@ def _capture_screenshot(name):
 
 
 # 以下三个函数是为了在html报告里增加列【Description】显示出用例的文档注释docstring，
-# 以及添加可排序的时间列，并删除links列
+# 以及添加可排序的时间列【Time】，并删除links列
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
     cells.insert(2, html.th('Description'))  # 报告上增加【Description】列
@@ -67,8 +67,8 @@ def pytest_html_results_table_header(cells):
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
     cells.insert(2, html.td(report.description))    # 给每行的Description列赋值，赋值变量是report.description，在下边的函数里定义该变量
-    cells.insert(1, html.td(datetime.utcnow(), class_='col-time')) # utcnow()是获取当前时间，这句是给Time列赋值，赋值当前时间
-    cells.pop()
+    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))  # utcnow()是获取当前时间，这句是给Time列赋值，赋值当前时间
+    cells.pop()   # 删除links列
 
 
 @pytest.mark.hookwrapper
@@ -76,6 +76,42 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     report.description = str(item.function.__doc__)  # 将每个函数的docstring赋值给report.description变量
+
+
+# 当用pytets做接口自动化时（注意是接口自动化，因为做web自动化，关注页面，失败会自动截图）
+# 加上下边的内容 3个函数，将接口的返回显示在报告上（也可以显示非json形式的返回结果，只要是请求的返回都可以显示，
+# 那么接收用例请求的返回值就要用r.text或者r.content（字节形式），但是一般是测试页面的返回才会是非json，
+# 看返回结果没什么意义），
+# 以及添加可排序的Time时间列，和删除Links列
+# 注意！！！必须将这三个函数放在添加描述列的后边，否则不生效
+@pytest.mark.optionalhook
+def pytest_html_results_table_header(cells):
+    cells.insert(2, html.th('Response'))     # 添加列名
+    cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 这句虽然在上边的添加描述列的相关函数里写了，
+                                                                          # 但是这里也要写，否则time列不显示
+    cells.pop()         # 这句虽然在上边的添加描述列函数里写了，但是这里也要写，否则links还显示
+                        # 也可以将这两句从上边的添加描述列的相关函数里删除，貌似只能在最后执行的代码里写上才会执行
+
+
+@pytest.mark.optionalhook
+def pytest_html_results_table_row(report, cells):
+    cells.insert(2, html.td(report.response))   # 给response每一行赋值
+    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))  # 这句虽然在上边的添加描述列的相关函数里写了，
+                                                                        # 但是这里也要写，否则time列不显示
+    cells.pop()  # 这句虽然在上边的添加描述列函数里写了，但是这里也要写，否则links还显示
+                 # 也可以将这两句从上边的添加描述列的相关函数里删除，貌似只能在最后执行的代码里写上才会执行
+
+
+@pytest.mark.hookwrapper
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    report.response = str(item.function())   # 每一条用例里加一个return 返回接口的返回结果
+                                         # 这里调用函数，来获取函数返回值，即接口的返回结果，
+                                         # 显示在html的【Response】列
+
+
+
 
 
 # @pytest.fixture(scope="function", autouse=True)

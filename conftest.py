@@ -55,7 +55,8 @@ def _capture_screenshot(name):
     driver.get_screenshot_as_file(name)
 
 
-# 以下三个函数是为了在html报告里显示出用例的文档注释docstring
+# 以下三个函数是为了在html报告里增加列【Description】显示出用例的文档注释docstring，
+# 以及添加可排序的时间列，并删除links列
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
     cells.insert(2, html.th('Description'))

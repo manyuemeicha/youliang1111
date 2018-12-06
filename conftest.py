@@ -59,15 +59,15 @@ def _capture_screenshot(name):
 # 以及添加可排序的时间列，并删除links列
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
-    cells.insert(2, html.th('Description'))
-    cells.insert(1, html.th('Time', class_='sortable time', col='time'))
-    cells.pop()
+    cells.insert(2, html.th('Description'))  # 报告上增加【Description】列
+    cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 报告上增加【Time】列
+    cells.pop()           # 删除links列
 
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
-    cells.insert(2, html.td(report.description))
-    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))
+    cells.insert(2, html.td(report.description))    # 给每行的Description列赋值，赋值变量是report.description，在下边的函数里定义该变量
+    cells.insert(1, html.td(datetime.utcnow(), class_='col-time')) # utcnow()是获取当前时间，这句是给Time列赋值，赋值当前时间
     cells.pop()
 
 
@@ -75,7 +75,7 @@ def pytest_html_results_table_row(report, cells):
 def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
-    report.description = str(item.function.__doc__)
+    report.description = str(item.function.__doc__)  # 将每个函数的docstring赋值给report.description变量
 
 
 # @pytest.fixture(scope="function", autouse=True)

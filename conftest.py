@@ -1,3 +1,5 @@
+
+# ！！！！！！！UI自动化的conftest.py内容，包括共用一个浏览器，报告里显示失败截图，描述列，时间列，去掉Link列，节点如果有参数化且有中文，进行转码显示正常，
 import pytest
 from selenium import webdriver
 import os
@@ -84,39 +86,60 @@ def pytest_html_results_table_row(report, cells):
     cells.pop(3)  # 删除Test列的行内容
     
 
+    
+    
+    
+    
+    
+# ！！！！！！！接口自动化的conftest.py内容，包括报告里显示 描述列，时间列，去掉Link列，节点如果有参数化且有中文，进行转码显示正常，
+# 以及显示接口（请求）的response返回，但是参数化的用例好像不能在报告里显示返回，因为conftest.py页面给response赋值时，没法参数化，会报缺少入参的错误
+
 # 当用pytets做接口自动化时（注意是接口自动化，因为做web自动化，关注页面，失败会自动截图）
 # 加上下边的内容 3个函数，将接口的返回显示在报告上（也可以显示非json形式的返回结果，只要是请求的返回都可以显示，
 # 那么接收用例请求的返回值就要用r.text（返回的是字符串类型，unicode字符；会自动根据响应头部的字符编码进行解码）
 # 或者r.content（字节形式，byte对象，适用于压缩后的或者图片/文件），但是一般是测试页面html的返回才会是非json，看测试页面的返回结果没什么意义，
 # 所以用r.text比较好），
-# 以及添加可排序的Time时间列，和删除Links列
-# 注意！！！必须将这三个函数放在添加描述列的后边，否则不生效
 # 注意！！！！每一条用例方法里加一个return 返回接口的返回结果，用于显示在html上
-@pytest.mark.optionalhook
-def pytest_html_results_table_header(cells):
-    cells.insert(2, html.th('Response'))     # 添加列名
-    cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 这句虽然在上边的添加描述列的相关函数里写了，
-                                                                          # 但是这里也要写，否则time列不显示
-    cells.pop()         # 这句虽然在上边的添加描述列函数里写了，但是这里也要写，否则links还显示
-                        # 也可以将这两句从上边的添加描述列的相关函数里删除，貌似只能在最后执行的代码里写上才会执行
+import pytest
+import os
+from datetime import datetime
+from py.xml import html
 
 
-@pytest.mark.optionalhook
-def pytest_html_results_table_row(report, cells):
-    cells.insert(2, html.td(report.response))   # 给response每一行赋值
-    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))  # 这句虽然在上边的添加描述列的相关函数里写了，
-                                                                        # 但是这里也要写，否则time列不显示
-    cells.pop()  # 这句虽然在上边的添加描述列函数里写了，但是这里也要写，否则links还显示
-                 # 也可以将这两句从上边的添加描述列的相关函数里删除，貌似只能在最后执行的代码里写上才会执行
-
-
+# 以下三个函数 是为了在报告里添加Description列（用例描述/注释）,Time列（获取当前时间），
+# 去掉原有的Test列，因为里边的中文显示有编码问题，重新添加Test_nodeid列，并将节点的参数化部分包含中文的进行转码，
+# 保证中文显示正常
+# 以及显示接口（请求）的返回值
 @pytest.mark.hookwrapper
-def pytest_runtest_makereport(item, call):
+def pytest_runtest_makereport(item):
+    pytest_html = item.config.pluginmanager.getplugin('html')
     outcome = yield
     report = outcome.get_result()
-    report.response = str(item.function())   # 每一条用例里加一个return 返回接口的返回结果
-                                         # 这里调用函数，来获取函数返回值，即接口的返回结果，
-                                         # 显示在html的【Response】列
+    
+    report.description = str(item.function.__doc__) # 给报告里的【Descript】列赋值
+    report.nodeid = report.nodeid.encode("utf-8").decode("unicode_escape")  # 给报告里的【Test_nodeid】列赋值，
+                                                                        # 目的是将节点里的参数包含中文部分进行转码，例如，
+                                                                         # 将src/test_case/test_01.py::test_001[/u54c8].
+                                                                        # 转码为src/test_case/test_01.py::test_001[绿萝]，使中文正常显示
+    report.response = str(item.function.__call__)
+    
+@pytest.mark.optionalhook
+def pytest_html_results_table_header(cells):
+    cells.insert(2, html.th('Description'))  # 添加Description列
+    cells.insert(1, html.th('Test_nodeid'))  # 添加Test_nodeid列,
+    cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 添加Time列
+    cells.insert(3, html.th('Response'))  # 添加列名
+    cells.pop(4)  # 删除Test列
+    cells.pop()   # 删除Link列的行内容
+    
+@pytest.mark.optionalhook
+def pytest_html_results_table_row(report, cells):
+    cells.insert(2, html.td(report.description))  # 用pytest_runtest_makereport()钩子函数里的report.description变量给每行复制
+    cells.insert(1, html.td(report.nodeid))   # 用pytest_runtest_makereport()钩子函数里的report.nodeid变量给每行复制
+    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))  # utcnow()是获取当前时间，用当前时间给Time列的每行赋值
+    cells.insert(3, html.td(report.response))  # 给response每一行赋值
+    cells.pop(4)  # 删除Test列的行内容
+    cells.pop()  # 删除Link列的行内容
 
 
 

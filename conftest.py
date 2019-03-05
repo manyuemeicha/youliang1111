@@ -53,35 +53,36 @@ def pytest_runtest_makereport(item):
                        'onclick="window.open(this.src)" align="right"/></div>' % image_path
                 extra.append(pytest_html.extras.html(html))
         report.extra = extra
+        
+        
+        report.description = str(item.function.__doc__) # 给报告里的【Descript】列赋值
+        report.nodeid = report.nodeid.encode("utf-8").decode("unicode_escape")  # 给报告里的【Test_nodeid】列赋值，
+                                                                        # 目的是将节点里的参数包含中文部分进行转码，例如，
+                                                                         # 将src/test_case/test_01.py::test_001[/u54c8].
+                                                                        # 转码为src/test_case/test_01.py::test_001[绿萝]，使中文正常显示
 
 
 def _capture_screenshot(name):
     driver.get_screenshot_as_file(name)
 
 
-# 以下三个函数是为了在html报告里增加列【Description】显示出用例的文档注释docstring，
-# 以及添加可排序的时间列【Time】，并删除links列
+#以下俩函数和pytest_runtest_makereport()钩子函数的最后两句；是为了在报告里添加Description列（用例描述/注释）,Time列（获取当前时间），
+# 去掉原有的Test列，因为里边的中文显示有编码问题，重新添加Test_nodeid列，并将节点的参数化部分包含中文的进行转码，
+# 保证中文显示正常
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
-    cells.insert(2, html.th('Description'))  # 报告上增加【Description】列
-    cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 报告上增加【Time】列
-    cells.pop()           # 删除links列
-
+    cells.insert(2, html.th('Description'))  # 添加Description列
+    cells.insert(1, html.th('Test_nodeid'))  # 添加Test_nodeid列,
+    cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 添加Time列
+    cells.pop(3)  # 删除Test列
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
-    cells.insert(2, html.td(report.description))    # 给每行的Description列赋值，赋值变量是report.description，在下边的函数里定义该变量
-    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))  # utcnow()是获取当前时间，这句是给Time列赋值，赋值当前时间
-    cells.pop()   # 删除links列
-
-
-@pytest.mark.hookwrapper
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    report = outcome.get_result()
-    report.description = str(item.function.__doc__)  # 将每个函数的docstring赋值给report.description变量。。。将这个钩子函数去掉，将这一句写到
-    # 最顶部的pytest_runtest_makereport()钩子函数里的最后也可以，都是同一个函数，目前相当于我又重写了一次pytest_runtest_makereport()
-
+    cells.insert(2, html.td(report.description))  # 用pytest_runtest_makereport()钩子函数里的report.description变量给每行复制
+    cells.insert(1, html.td(report.nodeid))   # 用pytest_runtest_makereport()钩子函数里的report.nodeid变量给每行复制
+    cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))  # utcnow()是获取当前时间，用当前时间给Time列的每行赋值
+    cells.pop(3)  # 删除Test列的行内容
+    
 
 # 当用pytets做接口自动化时（注意是接口自动化，因为做web自动化，关注页面，失败会自动截图）
 # 加上下边的内容 3个函数，将接口的返回显示在报告上（也可以显示非json形式的返回结果，只要是请求的返回都可以显示，

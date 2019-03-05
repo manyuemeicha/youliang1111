@@ -75,7 +75,8 @@ def pytest_html_results_table_row(report, cells):
 def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
-    report.description = str(item.function.__doc__)  # 将每个函数的docstring赋值给report.description变量
+    report.description = str(item.function.__doc__)  # 将每个函数的docstring赋值给report.description变量。。。将这个钩子函数去掉，将这一句写到
+    # 最顶部的pytest_runtest_makereport()钩子函数里的最后也可以，都是同一个函数，目前相当于我又重写了一次pytest_runtest_makereport()
 
 
 # 当用pytets做接口自动化时（注意是接口自动化，因为做web自动化，关注页面，失败会自动截图）

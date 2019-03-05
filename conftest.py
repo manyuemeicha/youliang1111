@@ -92,14 +92,17 @@ def pytest_html_results_table_row(report, cells):
     
     
 # ！！！！！！！接口自动化的conftest.py内容，包括报告里显示 描述列，时间列，去掉Link列，节点如果有参数化且有中文，进行转码显示正常，
-# 以及显示接口（请求）的response返回，但是参数化的用例好像不能在报告里显示返回，因为conftest.py页面给response赋值时，没法参数化，会报缺少入参的错误
+# 以及显示接口（请求）的response返回，
+# 但是参数化的用例好像不能在报告里显示返回，因为conftest.py页面给response赋值时，没法参数化，会报缺少入参的错误
+# 从断言失败的用例及以后的用例，都不会在报告里显示了，这些用例的所有列都不显示，只显示断言失败前执行成功的用例的情况，
+# 所以这个报告显示response的功能还是有缺陷的，还得修改
 
 # 当用pytets做接口自动化时（注意是接口自动化，因为做web自动化，关注页面，失败会自动截图）
 # 加上下边的内容 3个函数，将接口的返回显示在报告上（也可以显示非json形式的返回结果，只要是请求的返回都可以显示，
 # 那么接收用例请求的返回值就要用r.text（返回的是字符串类型，unicode字符；会自动根据响应头部的字符编码进行解码）
 # 或者r.content（字节形式，byte对象，适用于压缩后的或者图片/文件），但是一般是测试页面html的返回才会是非json，看测试页面的返回结果没什么意义，
 # 所以用r.text比较好），
-# 注意！！！！每一条用例方法里加一个return 返回接口的返回结果，用于显示在html上
+#！！！！注意！！！！每一条用例里加一个return  返回接口的返回结果，用于显示在html上
 import pytest
 import os
 from datetime import datetime
@@ -121,7 +124,7 @@ def pytest_runtest_makereport(item):
                                                                         # 目的是将节点里的参数包含中文部分进行转码，例如，
                                                                          # 将src/test_case/test_01.py::test_001[/u54c8].
                                                                         # 转码为src/test_case/test_01.py::test_001[绿萝]，使中文正常显示
-    report.response = str(item.function.__call__)
+    report.response = str(item.function())
     
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):

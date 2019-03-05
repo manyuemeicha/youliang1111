@@ -39,7 +39,11 @@ def pytest_runtest_makereport(item):
             存失败用例命名的图片，所以把::改为_,再加上.png，但是我们希望它存到report/image路径里，
             截图的代码写在conftest.py里，所以路径要相对于该文件，即前边加上"./report/image/"，这样截图就会进report/image里
             '''
-            screen_name ="./report/image/"+report.nodeid.replace("::", "_").replace("src/test_case/","")+".png"
+            screen_name = "./report/image/"+report.nodeid.replace("::", "_").replace("src/test_case/","")+".png"
+            # （！重要！）对参数化了的用例，参数包含中文，即report.nodeid包含中文的用例获取的图片名称，例如./report/image/test_02.py_test_02[/u54c8].png
+            # 节点后边跟着的参数包含中文，但是显示有问题，所以需要按照将报告里的nodeid包含中文需要转码的方法，对该screen_name进行转码，否则截图会失败，只有
+            #只有转为文字，截图才会成功
+            screen_name = screen_name.encode("utf-8").decode("unicode_escape")  
             _capture_screenshot(screen_name)
             # 这里再定义一个图片路径的原因是报告里的显示的图片的路径是相当于当前报告文件的，如果还用screen_name，
             # 那报告里肯定找不到图片的，因为路径显示不对，所以重新定义一个相对于当前报告文件的图片路径，让报告文件能显示图片

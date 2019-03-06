@@ -77,6 +77,7 @@ def pytest_html_results_table_header(cells):
     cells.insert(1, html.th('Test_nodeid'))  # 添加Test_nodeid列,
     cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 添加Time列
     cells.pop(3)  # 删除Test列
+    cells.pop()   # 删除Link列
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
@@ -84,7 +85,7 @@ def pytest_html_results_table_row(report, cells):
     cells.insert(1, html.td(report.nodeid))   # 用pytest_runtest_makereport()钩子函数里的report.nodeid变量给每行复制
     cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))  # utcnow()是获取当前时间，用当前时间给Time列的每行赋值
     cells.pop(3)  # 删除Test列的行内容
-    
+    cells.pop()  # 删除Link列的行内容
 
     
     
@@ -133,7 +134,7 @@ def pytest_html_results_table_header(cells):
     cells.insert(1, html.th('Time', class_='sortable time', col='time'))  # 添加Time列
     cells.insert(3, html.th('Response'))  # 添加列名
     cells.pop(4)  # 删除Test列
-    cells.pop()   # 删除Link列的行内容
+    cells.pop()   # 删除Link列
     
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):

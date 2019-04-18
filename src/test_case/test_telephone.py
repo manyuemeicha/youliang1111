@@ -3,7 +3,8 @@ from src.page.login_youliang import Login_Youliang
 import pytest
 
 
-#注意用例的入参写上browser，以及初始化页面类时，也要传入browser，但是用例文件里不要导入browser，否则每个页面打开一个浏览器
+# 注意用例的入参写上browser，以及初始化页面类时，也要传入browser，但是用例文件里不要导入browser，否则每个页面打开一个浏览器；
+# 原因可能是程序会找最近导入的conftest里的指定的fixture，虽然是session，但是会用最近的代码执行，导致每个文件导入一次，每个文件都打开一个浏览器，也许原因是这样
 def test_phone(browser):
     '''电话下单'''
     lg=Login_Youliang(browser)

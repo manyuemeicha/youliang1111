@@ -3,7 +3,7 @@ from src.page.login_youliang import Login_Youliang
 import pytest
 
 
-#注意用例的入参写上browser，以及初始化页面类时，也要传入browser
+#注意用例的入参写上browser，以及初始化页面类时，也要传入browser，但是用例文件里不要导入browser，否则每个页面打开一个浏览器
 def test_phone(browser):
     '''电话下单'''
     lg=Login_Youliang(browser)

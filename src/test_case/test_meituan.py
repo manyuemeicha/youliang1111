@@ -3,7 +3,7 @@ import pytest
 from db_fixture.mysql_db import DB
 
 
-@pytest.mark.skipif(3>2,reason="测试")
+@pytest.mark.skipif(1>2,reason="测试")
 def test_meituan():
     '''美团下单'''
     db=DB()
